@@ -20,6 +20,8 @@ enum TopicType {
 enum ContextType {
     //图片
     IMG=0,
+    //音频
+    VOI,
     //字符串
     STR
 };
@@ -69,7 +71,7 @@ public:
      */
     ImMessage(const TopicType type1, const QString& targetId,
               bool visible, const ContextType type2,
-              const QString& sendId, const QString& context);
+              const QString& sendId, const QString& context, const QString& sendTime);
     ImMessage(const ImMessage& msg);
     //获取消息id
     unsigned short getMsgId() const;
@@ -81,6 +83,8 @@ public:
     QString getSendId() const;
     //获取发送内容
     QString getContext() const;
+    //获取发送时间
+    QString getSendTime() const;
     //设置消息id
     void setMsgId(unsigned short msgid);
     //设置可视设置
@@ -92,6 +96,8 @@ public:
     void setSendId(const QString& sendId);
     //设置发送内容
     void setContext(const QString& context);
+    //设置发送时间
+    void setSendTime(const QString& sendTime);
     //生成topic
     QString build();
     //生成特殊topic
@@ -123,6 +129,8 @@ private:
     QString sendId;
     //发送内容
     QString context;
+    //发送时间
+    QString sendTime;
     //topic
     ImTopic topic;
 };

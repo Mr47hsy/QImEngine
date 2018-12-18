@@ -42,7 +42,7 @@ im::ImMessage::ImMessage(const im::TopicType type, const QString &targetId)
 
 im::ImMessage::ImMessage(const im::TopicType type1, const QString &targetId,
                          bool visible, const im::ContextType type2,
-                         const QString &sendId, const QString &context)
+                         const QString &sendId, const QString &context, const QString &sendTime)
 :QObject(nullptr)
 {
     topic.setTopicType(type1);
@@ -51,6 +51,7 @@ im::ImMessage::ImMessage(const im::TopicType type1, const QString &targetId,
     this->type = type2;
     this->sendId = sendId;
     this->context = context;
+    this->sendTime = sendTime;
 }
 
 im::ImMessage::ImMessage(const im::ImMessage &msg)
@@ -89,6 +90,11 @@ QString im::ImMessage::getContext() const
     return context;
 }
 
+QString im::ImMessage::getSendTime() const
+{
+    return sendTime;
+}
+
 void im::ImMessage::setMsgId(unsigned short msgid)
 {
     this->msgid = msgid;
@@ -113,6 +119,10 @@ void im::ImMessage::setContextType(const int type)
     }
     case im::STR :{
         this->type = im::STR;
+        break;
+    }
+    case im::VOI :{
+        this->type = im::VOI;
     }
     }
 }
@@ -125,6 +135,11 @@ void im::ImMessage::setSendId(const QString &sendId)
 void im::ImMessage::setContext(const QString &context)
 {
     this->context = context;
+}
+
+void im::ImMessage::setSendTime(const QString &sendTime)
+{
+    this->sendTime = sendTime;
 }
 
 QString im::ImMessage::build()
@@ -209,9 +224,10 @@ void im::ImMessage::form(const QByteArray &payload)
         if(document.isObject()){
             QJsonObject object = document.object();
             this->setVisible(object.value("isVisible").toBool(true));
-            this->setContextType(object.value("Context").toInt(1));
+            this->setContextType(object.value("ContextType").toInt(1));
             this->setSendId(object.value("SendId").toString("0"));
             this->setContext(object.value("Context").toString(""));
+            this->setSendTime(object.value("SendTime").toString(""));
         }else{
             ImError imerror(jsonError);
             qDebug() << "error";
@@ -227,6 +243,7 @@ QByteArray im::ImMessage::make()
     json.insert("ContextType", this->getContextType());
     json.insert("SendId", this->getSendId());
     json.insert("Context", this->getContext());
+    json.insert("SendTime", this->getSendTime());
 
     QJsonDocument document;
     document.setObject(json);

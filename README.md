@@ -1,12 +1,12 @@
-​	QImEngine是基于QMQTT库快速构建im客户端的QT库，**仅可build by GUN/g++，如果采用MingGW or MSVC build 可能会失败**。
+​	QImEngine是基于[QMQTT](https://github.com/emqtt/qmqtt)库快速构建im客户端的QT库，**仅可build by GUN/g++，如果采用MingGW or MSVC build 可能会失败**。
 
-    [了解QMQTT]: https://github.com/emqtt/qmqtt
+## 生成
 
+你可以选择直接使用位于sample/im/lib下生成的静态库
 
+但如果希望使用从源码生成的静态库可以使用QT creator打开位于src下的.pro文件进行构建
 
 ## 使用
-
-------
 
 首先请导入生成的QImEngine.a静态库
 
@@ -24,9 +24,7 @@ int main(int argc, char *argv[])
     //连接
     im::ImClient* client_ptr = engine.loginBroker("127.0.0.1",1883);
     //发送
-    im::ImMessage msg(im::USR,"otherClient",true//可见消息
-                                       ,im::STR//字符串消息
-                                       ,client_ptr->id(),"hello world");
+    im::ImMessage msg(im::USR,"otherClient",true/*可见消息*/,im::STR/*字符串消息*/,client_ptr->id(),"hello world");
     client_ptr->send(msg);
     //结束
     engine.clear();
@@ -136,12 +134,12 @@ void Test::OnReceived(const im::ImMessage &msg)
 }
 ```
 
-
+更多[example](https://github.com/Mr47hsy/QImEngine/tree/master/sample)
 
 Options:
 
 ```c++
-//设置mqtt版本
+	//设置mqtt版本
     ImOptions& setMQTTVersion(QMQTT::MQTTVersion version);
     //设置心跳检测
     ImOptions& setKeepAlive(unsigned short time);
@@ -163,10 +161,8 @@ Options:
 
 ## Signals
 
-------
-
 ```c++
-//连接到Broker成功时发出信号
+		//连接到Broker成功时发出信号
         void success();
         //取消连接成功时发出信号
         void disconnected();
